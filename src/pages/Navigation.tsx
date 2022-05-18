@@ -24,7 +24,11 @@ const Navigation = ({ tabs, tab, onTabChange }: Props) => {
   return (
     <Wrapper>
       {tabs.map(({ icon, text }) => (
-        <Tab onClick={() => onTabChange(text)} selected={tab === text}>
+        <Tab
+          key={text}
+          onClick={() => onTabChange(text)}
+          selected={tab === text}
+        >
           <Icon {...icon} onClick={() => null} />
           {text}
         </Tab>

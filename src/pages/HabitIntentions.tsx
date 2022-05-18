@@ -1,122 +1,142 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
+import DraggableList from "../components/draggable/DraggableList";
 import Habit, { HabitProps } from "../components/Habit";
 import NewHabitIntention from "../components/NewHabitIntention";
 
+type typeProp = "desired" | "undesired" | "achieved";
+const DESIRED = "desired";
+const UNDESIRED = "undesired";
+const ACHIEVED = "achieved";
+
+interface HabitIntentionProps {
+  desired: HabitProps[];
+  undesired: HabitProps[];
+  achieved: HabitProps[];
+}
+
 interface Props {
-  habitIntentions: HabitProps[];
+  habitIntentions: HabitIntentionProps;
   onSave: Function;
 }
 
 const HabitIntentions = ({ habitIntentions, onSave }: Props) => {
-  const [dragOverIndex, setDragOverIndex] = useState<number>(0);
-  const [desiredHabits, setDesiredHabits] = useState<HabitProps[]>([]);
-  const [undesiredHabits, setUndesiredHabits] = useState<HabitProps[]>([]);
-  const [achievedHabits, setAchievedHabits] = useState<HabitProps[]>([]);
-  const habits = habitIntentions;
+  const { desired, undesired, achieved } = habitIntentions;
 
-  const handleDelete = (id: string) =>
-    onSave(habitIntentions.filter((h) => h.id !== id));
+  const handleDelete = (type: typeProp, id: string) =>
+    onSave({
+      ...habitIntentions,
+      [type]: habitIntentions[type].filter((h) => h.id !== id),
+    });
 
-  const handleDrop = (index: number) => {
-    if (index === dragOverIndex) return;
-    const tempArray = desiredHabits.slice();
-    const moveObj = tempArray.splice(index, 1);
-    tempArray.splice(dragOverIndex, 0, moveObj[0]);
-    setDesiredHabits(tempArray);
-  };
-
-  const handleEdit = (habit: HabitProps) =>
-    onSave(
-      habitIntentions.map((h: HabitProps) => (h.id === habit.id ? habit : h))
-    );
-
-  useEffect(() => {
-    onSave(habitIntentions);
-    setDesiredHabits(habits.filter((h) => h.isDesired && !h.isAchieved));
-    setUndesiredHabits(habits.filter((h) => !h.isDesired));
-    setAchievedHabits(habits.filter((h) => h.isAchieved));
-    // eslint-disable-next-line
-  }, [habitIntentions]);
+  const handleEdit = (type: typeProp, habit: HabitProps) =>
+    onSave({
+      ...habitIntentions,
+      [type]: habitIntentions[type].map((h: HabitProps) =>
+        h.id === habit.id ? habit : h
+      ),
+    });
 
   return (
     <Wrapper>
       <h1>Habit Intentions</h1>
       <NewHabitIntention
         onAddHabitIntention={(habit: any) =>
-          onSave([...habitIntentions, habit])
+          onSave({
+            ...habitIntentions,
+            desired: [...habitIntentions.desired, habit],
+          })
         }
       />
-      {desiredHabits.length !== 0 && (
+      {desired.length !== 0 && (
         <>
           <h2>Desired</h2>
           <ul>
-            <Habit
-              {...desiredHabits[0]}
-              index={0}
-              onDragOver={(index: number) => setDragOverIndex(index)}
-              onDrop={handleDrop}
-              onEdit={handleEdit}
-              onAchieved={(id: string) => {
-                const newHabit = {
-                  ...habitIntentions.find((h) => h.id === id),
-                  isAchieved: true,
-                };
-                const theRest = habitIntentions.filter((h) => h.id !== id);
-                onSave([newHabit, ...theRest]);
-              }}
-              onDelete={handleDelete}
-            />
-            {desiredHabits.length > 1 && (
+            {desired.length > 1 && (
               <Ingress>
                 Creating new habits is a long term game, remember to only work
                 on ONE new habit at a time and make sure it sticks. Work on the
-                above habit until it's been achieved before moving it to the
+                first habit until it's been achieved before moving it to the
                 achieved list and continuing with the next habit.
               </Ingress>
             )}
-            {desiredHabits.slice(1).map((habit: HabitProps, index: number) => (
-              <Habit
-                {...habit}
-                onDragOver={(index: number) => setDragOverIndex(index)}
-                onDrop={handleDrop}
-                onDelete={handleDelete}
-                index={index + 1}
-              />
-            ))}
+
+            <DraggableList
+              onListUpdate={(list: any) =>
+                onSave({ ...habitIntentions, desired: list })
+              }
+              list={desired}
+              listView={desired.map((habit: HabitProps, i: number) => (
+                <HabitWrapper>
+                  {i === 0 ? (
+                    <Habit
+                      {...habit}
+                      onEdit={(h: HabitProps) => handleEdit(DESIRED, h)}
+                      onDelete={(id: string) => handleDelete(DESIRED, id)}
+                      onAchieved={(id: string) => {
+                        const newHabit = desired.find((h) => h.id === id);
+                        const filteredList = desired.filter((h) => h.id !== id);
+                        onSave({
+                          desired: filteredList,
+                          undesired,
+                          achieved: [newHabit, ...achieved],
+                        });
+                      }}
+                    />
+                  ) : (
+                    <Habit
+                      {...habit}
+                      onEdit={(h: HabitProps) => handleEdit(DESIRED, h)}
+                      onDelete={(id: string) => handleDelete(DESIRED, id)}
+                    />
+                  )}
+                </HabitWrapper>
+              ))}
+            />
           </ul>
         </>
       )}
       <hr />
-      {undesiredHabits.length !== 0 && (
+      {undesired.length !== 0 && (
         <>
           <h2>Undesired</h2>
           <ul>
-            {undesiredHabits.map((habit: HabitProps, index: number) => (
-              <Habit
-                {...habit}
-                onDragOver={(index: number) => setDragOverIndex(index)}
-                onDrop={handleDrop}
-                onDelete={handleDelete}
-                index={index}
-              />
-            ))}
+            <DraggableList
+              onListUpdate={(list: any) =>
+                onSave({ ...habitIntentions, undesired: list })
+              }
+              list={undesired}
+              listView={undesired.map((habit: HabitProps) => (
+                <HabitWrapper>
+                  <Habit
+                    {...habit}
+                    onEdit={(h: HabitProps) => handleEdit(UNDESIRED, h)}
+                    onDelete={(id: string) => handleDelete(UNDESIRED, id)}
+                  />
+                </HabitWrapper>
+              ))}
+            />
           </ul>
         </>
       )}
-      {achievedHabits.length !== 0 && (
+      {achieved.length !== 0 && (
         <>
           <h2>Achieved</h2>
           <ul>
-            {achievedHabits.map((habit: HabitProps, index: number) => (
-              <Habit
-                {...habit}
-                onDragOver={(index: number) => setDragOverIndex(index)}
-                onDrop={handleDrop}
-                onDelete={handleDelete}
-                index={index}
-              />
-            ))}
+            <DraggableList
+              onListUpdate={(list: any) =>
+                onSave({ ...habitIntentions, achieved: list })
+              }
+              list={achieved}
+              listView={achieved.map((habit: HabitProps) => (
+                <HabitWrapper>
+                  <Habit
+                    {...habit}
+                    onEdit={(h: HabitProps) => handleEdit(ACHIEVED, h)}
+                    onDelete={(id: string) => handleDelete(ACHIEVED, id)}
+                  />
+                </HabitWrapper>
+              ))}
+            />
           </ul>
           <hr />
         </>
@@ -131,6 +151,10 @@ const Wrapper = styled.div`
     padding: 0;
     margin-bottom: 30px;
   }
+`;
+const HabitWrapper = styled.div`
+  width: 100%;
+  margin-bottom: 20px;
 `;
 const Ingress = styled.p`
   background-color: ${(p) => p.theme.secondary.bgColor};

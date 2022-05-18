@@ -23,6 +23,12 @@ export const CHEAT_SHEET = "cheat sheet";
 export const SCORECARD = "scorecard";
 export const HABIT_INTENTIONS = "habit intentions";
 
+const defaultHabitIntentions = {
+  desired: [],
+  undesired: [],
+  achieved: [],
+};
+
 const tabs = [
   { icon: home, text: HOME },
   { icon: assignmentTurnedIn, text: TODOS },
@@ -62,7 +68,7 @@ const App = () => {
         )}
         {tab === HABIT_INTENTIONS && (
           <HabitIntentions
-            habitIntentions={habits?.habitIntentions || []}
+            habitIntentions={habits?.habitIntentions || defaultHabitIntentions}
             onSave={(habitIntentions: HabitProps[]) =>
               setHabits({ ...habits, habitIntentions })
             }

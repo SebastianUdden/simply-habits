@@ -66,21 +66,6 @@ const ScoreHabit = ({
     }
   };
 
-  // const handleChangePosition = (change: number) => {
-  //   const oldIndex = habits.findIndex(
-  //     (h: ScoreHabitProps) => h.description === description
-  //   );
-  //   const newIndex = oldIndex + change;
-  //   if (newIndex < 0 || newIndex > habits.length - 1) return;
-  //   const tempHabits = [...habits];
-  //   const oldObj = habits[oldIndex];
-  //   const newObj = habits[newIndex];
-
-  //   tempHabits[oldIndex] = newObj;
-  //   tempHabits[newIndex] = oldObj;
-  //   onChangeHabits(tempHabits);
-  // };
-
   return (
     <Row
       draggable="true"
@@ -150,26 +135,5 @@ const Description = styled.td`
 const Text = styled.span`
   padding: 0 20px;
 `;
-// const Arrows = styled.div`
-//   display: flex;
-//   flex-direction: column;
-// `;
-// const Arrow = styled.button`
-//   margin: 2px 2px 0 10px;
-//   padding: 4px 12px;
-//   border-radius: 3px;
-//   border: none;
-//   font-size: 14px;
-//   cursor: pointer;
-//   background-color: ${(p) => p.theme.background.bgColor};
-//   color: ${(p) => p.theme.background.color};
-//   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-//   :hover {
-//     opacity: 0.8;
-//   }
-//   :active {
-//     opacity: 0.5;
-//   }
-// `;
 
 export default ScoreHabit;

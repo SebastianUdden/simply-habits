@@ -4,7 +4,6 @@ import Cue, { CueProps } from "./Cue";
 import EditHabitIntention from "./EditHabitIntention";
 
 export interface HabitProps {
-  index: number;
   id: string;
   name: string;
   cue: CueProps;
@@ -18,40 +17,17 @@ export interface HabitProps {
 }
 
 const Habit = ({
-  index,
   id,
   name,
   cue,
   isDesired,
   isAchieved,
-  onDrop,
-  onDragOver,
   onEdit,
   onAchieved,
   onDelete,
 }: HabitProps) => {
   const [showEdit, setShowEdit] = useState(false);
-  const [isDragged, setIsDragged] = useState(false);
-  const [isDraggedOver, setIsDraggedOver] = useState(false);
 
-  const handleDragEnter = (e: any) => {
-    e.preventDefault();
-    setIsDraggedOver(true);
-    onDragOver && onDragOver(index);
-  };
-  const handleDragLeave = (e: any) => {
-    e.preventDefault();
-    setIsDraggedOver(false);
-  };
-  const handleDragOver = (e: any) => {
-    e.preventDefault();
-    setIsDraggedOver(false);
-  };
-  const handleDrop = (e: any) => {
-    e.stopPropagation();
-    setIsDragged(false);
-    onDrop && onDrop(index);
-  };
   const handleEditHabitIntention = (h: HabitProps) => {
     setShowEdit(false);
     onEdit && onEdit(h);
@@ -69,16 +45,7 @@ const Habit = ({
           onEdit={handleEditHabitIntention}
         />
       ) : (
-        <Wrapper
-          draggable="true"
-          onDragStart={() => setIsDragged(true)}
-          onDragEnd={handleDrop}
-          onDragEnter={handleDragEnter}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          isDragged={isDragged}
-          isDraggedOver={isDraggedOver}
-        >
+        <Wrapper>
           <P>
             I will {isDesired ? "" : "not "}
             <Name>{name}</Name> {cue && <Cue {...cue} />}
@@ -104,23 +71,13 @@ const Habit = ({
   );
 };
 
-const Wrapper = styled.div<{ isDragged: boolean; isDraggedOver: boolean }>`
-  margin-bottom: 20px;
+const Wrapper = styled.div`
+  width: 100%;
   background-color: ${(p) => p.theme.background.bgColor};
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   display: flex;
   justify-content: space-between;
   opacity: 1;
-  ${(p) =>
-    p.isDragged &&
-    `
-    opacity: 0.01;
-  `}
-  ${(p) =>
-    p.isDraggedOver &&
-    `
-    opacity: 0.01;
-  `}
 `;
 const P = styled.p`
   margin: 0;

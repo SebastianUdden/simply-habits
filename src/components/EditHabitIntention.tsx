@@ -86,7 +86,6 @@ const EditHabitIntention = ({
         <Button onClick={handleSubmit}>Save</Button>
       </Flex>
       <Habit
-        index={0}
         id="0"
         isDesired
         name={behavior || "BEHAVIOR"}

@@ -68,7 +68,6 @@ const NewHabitIntention = ({ onAddHabitIntention }: Props) => {
         <Button onClick={handleSubmit}>Create</Button>
       </Flex>
       <Habit
-        index={0}
         id="0"
         isDesired
         name={behavior || "BEHAVIOR"}
