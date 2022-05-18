@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 export interface CueProps {
-  time: string | undefined;
+  time?: string | undefined;
   location?: string | undefined;
-  habit?: string | undefined;
+  trigger?: string | undefined;
+  temptation?: string | undefined;
 }
 
-const Cue = ({ time, location, habit }: CueProps) => {
+const Cue = ({ time, location, trigger, temptation }: CueProps) => {
   return (
     <>
       {time && (
@@ -20,9 +21,14 @@ const Cue = ({ time, location, habit }: CueProps) => {
           in <Place>{location}</Place>
         </>
       )}
-      {habit && (
+      {trigger && (
         <>
-          after I <Name>{habit}</Name>
+          after I <Name>{trigger}</Name>
+        </>
+      )}
+      {temptation && (
+        <>
+          , then I get to <Time>{temptation}</Time>
         </>
       )}
     </>

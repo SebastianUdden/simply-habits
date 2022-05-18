@@ -8,7 +8,7 @@ const DESIRED = "desired";
 const UNDESIRED = "undesired";
 const ACHIEVED = "achieved";
 
-interface HabitIntentionProps {
+export interface HabitIntentionProps {
   desired: HabitProps[];
   undesired: HabitProps[];
   achieved: HabitProps[];
@@ -38,12 +38,11 @@ const HabitIntentions = ({ habitIntentions, onSave }: Props) => {
 
   return (
     <Wrapper>
-      <h1>Habit Intentions</h1>
       <NewHabitIntention
         onAddHabitIntention={(habit: any) =>
           onSave({
             ...habitIntentions,
-            desired: [...habitIntentions.desired, habit],
+            desired: [habit, ...habitIntentions.desired],
           })
         }
       />
@@ -56,8 +55,8 @@ const HabitIntentions = ({ habitIntentions, onSave }: Props) => {
                 Creating new habits is a long term game, remember to only work
                 on ONE new habit at a time and make sure it sticks. Work on the
                 first habit until it's been achieved (roughly 50 repetitions or
-                4 weeks) before moving it to the achieved list and continuing
-                with the next habit.
+                at least 3 weeks) before moving it to the achieved list and
+                continuing with the next habit.
               </Ingress>
             )}
 

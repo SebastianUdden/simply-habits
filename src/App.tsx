@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Home from "./pages/Home";
-import Todos from "./pages/Todos";
 import Navigation from "./pages/Navigation";
 import { home } from "./icons/home";
 import Theme, { themeEnum } from "./Theme";
@@ -16,12 +15,13 @@ import styled from "styled-components";
 import { getSaved, save } from "./utils";
 import { HabitProps } from "./components/Habit";
 import { ScoreHabitProps } from "./components/ScoreHabit";
+import HabitTracker from "./pages/HabitTracker";
 
 export const HOME = "home";
-export const TODOS = "todos";
 export const CHEAT_SHEET = "cheat sheet";
 export const SCORECARD = "scorecard";
 export const HABIT_INTENTIONS = "habit intentions";
+export const HABIT_TRACKER = "habit tracker";
 
 const defaultHabitIntentions = {
   desired: [],
@@ -30,11 +30,17 @@ const defaultHabitIntentions = {
 };
 
 const tabs = [
-  { icon: home, text: HOME },
-  { icon: assignmentTurnedIn, text: TODOS },
-  { icon: assignment, text: CHEAT_SHEET },
-  { icon: insertChart, text: SCORECARD },
-  { icon: dynamicFeed, text: HABIT_INTENTIONS },
+  { icon: home, text: { desktop: HOME, mobile: HOME } },
+  { icon: assignment, text: { desktop: CHEAT_SHEET, mobile: "Help" } },
+  { icon: insertChart, text: { desktop: SCORECARD, mobile: "Score" } },
+  {
+    icon: dynamicFeed,
+    text: { desktop: HABIT_INTENTIONS, mobile: "Habits" },
+  },
+  {
+    icon: assignmentTurnedIn,
+    text: { desktop: HABIT_TRACKER, mobile: "Tracker" },
+  },
 ];
 
 const App = () => {
@@ -56,7 +62,6 @@ const App = () => {
     <Theme theme={theme}>
       <Wrapper>
         {tab === HOME && <Home />}
-        {tab === TODOS && <Todos />}
         {tab === CHEAT_SHEET && <CheatSheet />}
         {tab === SCORECARD && (
           <Scorecard
@@ -68,6 +73,14 @@ const App = () => {
         )}
         {tab === HABIT_INTENTIONS && (
           <HabitIntentions
+            habitIntentions={habits?.habitIntentions || defaultHabitIntentions}
+            onSave={(habitIntentions: HabitProps[]) =>
+              setHabits({ ...habits, habitIntentions })
+            }
+          />
+        )}
+        {tab === HABIT_TRACKER && (
+          <HabitTracker
             habitIntentions={habits?.habitIntentions || defaultHabitIntentions}
             onSave={(habitIntentions: HabitProps[]) =>
               setHabits({ ...habits, habitIntentions })

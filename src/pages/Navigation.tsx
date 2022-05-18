@@ -11,7 +11,7 @@ interface IconProps {
 
 interface TabProps {
   icon: IconProps;
-  text: string;
+  text: { desktop: string; mobile: string };
 }
 
 interface Props {
@@ -25,12 +25,13 @@ const Navigation = ({ tabs, tab, onTabChange }: Props) => {
     <Wrapper>
       {tabs.map(({ icon, text }) => (
         <Tab
-          key={text}
-          onClick={() => onTabChange(text)}
-          selected={tab === text}
+          key={text.desktop}
+          onClick={() => onTabChange(text.desktop)}
+          selected={tab === text.desktop}
         >
           <Icon {...icon} onClick={() => null} />
-          {text}
+          <Mobile>{text.mobile}</Mobile>
+          <Desktop>{text.desktop}</Desktop>
         </Tab>
       ))}
     </Wrapper>
@@ -66,6 +67,18 @@ const Tab = styled.button<{ selected?: boolean }>`
     background-color: ${p.theme.primaryVariant.bgColor};
     color: ${p.theme.primaryVariant.color};
   `}
+`;
+const Mobile = styled.span`
+  display: block;
+  @media (min-width: 600px) {
+    display: none;
+  }
+`;
+const Desktop = styled.span`
+  display: none;
+  @media (min-width: 600px) {
+    display: block;
+  }
 `;
 
 export default Navigation;

@@ -3,25 +3,26 @@ import styled from "styled-components";
 import Cue, { CueProps } from "./Cue";
 import EditHabitIntention from "./EditHabitIntention";
 
+interface Completion {
+  time: Date;
+}
 export interface HabitProps {
   id: string;
   name: string;
   cue: CueProps;
-  isDesired: boolean;
-  isAchieved?: boolean;
+  completions?: Completion[];
+  onAddCompletion?: Function;
   onEdit?: Function;
   onAchieved?: Function;
   onDelete?: Function;
-  onDrop?: Function;
-  onDragOver?: Function;
 }
 
 const Habit = ({
   id,
   name,
   cue,
-  isDesired,
-  isAchieved,
+  completions,
+  onAddCompletion,
   onEdit,
   onAchieved,
   onDelete,
@@ -40,31 +41,43 @@ const Habit = ({
           id={id}
           name={name}
           cue={cue}
-          isDesired={isDesired}
-          isAchieved={isAchieved}
           onEdit={handleEditHabitIntention}
         />
       ) : (
         <Wrapper>
-          <P>
-            I will {isDesired ? "" : "not "}
-            <Name>{name}</Name> {cue && <Cue {...cue} />}
-          </P>
-          <Buttons>
-            {onAchieved && (
-              <Button onClick={() => onAchieved(id)}>Achieved</Button>
-            )}
-            {onEdit && (
-              <Button onClick={() => setShowEdit(true)} isEdit>
-                Edit
-              </Button>
-            )}
-            {onDelete && (
-              <Button onClick={() => onDelete(id)} isDelete>
-                Delete
-              </Button>
-            )}
-          </Buttons>
+          <Row>
+            <P>
+              I will <Name>{name}</Name> {cue && <Cue {...cue} />}
+            </P>
+            <Buttons>
+              {onAchieved && (
+                <Button onClick={() => onAchieved(id)}>Achieved</Button>
+              )}
+              {onEdit && (
+                <Button onClick={() => setShowEdit(true)} isEdit>
+                  Edit
+                </Button>
+              )}
+              {onAddCompletion && (
+                <Button onClick={() => onAddCompletion(id)}>+</Button>
+              )}
+              {onDelete && (
+                <Button onClick={() => onDelete(id)} isDelete>
+                  Delete
+                </Button>
+              )}
+            </Buttons>
+          </Row>
+          {onAddCompletion && completions && (
+            <Row>
+              <Count pass50={completions?.length > 49}>
+                <span>{completions.length}</span>
+                {completions.map((c) => (
+                  <Dot />
+                ))}
+              </Count>
+            </Row>
+          )}
         </Wrapper>
       )}
     </>
@@ -72,12 +85,19 @@ const Habit = ({
 };
 
 const Wrapper = styled.div`
+  box-sizing: border-box;
   width: 100%;
   background-color: ${(p) => p.theme.background.bgColor};
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  display: flex;
-  justify-content: space-between;
   opacity: 1;
+`;
+const Row = styled.div`
+  display: flex;
+  flex-direction: column;
+  @media (min-width: 600px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 const P = styled.p`
   margin: 0;
@@ -89,6 +109,9 @@ const Name = styled.label`
 `;
 const Buttons = styled.div`
   display: flex;
+  justify-content: flex-end;
+  @media (min-width: 600px) {
+  }
 `;
 const Button = styled.button<{ isDelete?: boolean; isEdit?: boolean }>`
   font-size: 16px;
@@ -115,6 +138,28 @@ const Button = styled.button<{ isDelete?: boolean; isEdit?: boolean }>`
     background-color: ${p.theme.primaryVariant.bgColor};
     color: ${p.theme.primaryVariant.color};
   `}
+`;
+const Count = styled(P)<{ pass50: boolean }>`
+  background-color: ${(p) =>
+    p.theme[p.pass50 ? "primary" : "secondary"].bgColor};
+  color: ${(p) => p.theme.primary.color};
+  padding: 10px 30px 7px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  span {
+    width: 17px;
+  }
+`;
+const Dot = styled.div`
+  background-color: ${(p) => p.theme.background.bgColor};
+  color: ${(p) => p.theme.background.color};
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 4px 0 3px 7px;
 `;
 
 export default Habit;

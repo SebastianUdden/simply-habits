@@ -6,40 +6,47 @@ import Habit from "./Habit";
 interface Props {
   id: string;
   name: string;
-  isDesired?: boolean;
-  isAchieved?: boolean;
   cue: CueProps;
   onEdit?: Function;
 }
 
-const EditHabitIntention = ({
-  onEdit,
-  id,
-  name,
-  isDesired,
-  isAchieved,
-  cue,
-}: Props) => {
+const EditHabitIntention = ({ onEdit, id, name, cue }: Props) => {
   const behaviorRef = useRef<any>(null);
   const timeRef = useRef<any>(null);
   const locationRef = useRef<any>(null);
+  const triggerRef = useRef<any>(null);
+
   const [behavior, setBehavior] = useState(name);
   const [time, setTime] = useState(cue.time);
   const [location, setLocation] = useState(cue.location);
+  const [trigger, setTrigger] = useState(cue.trigger);
+  const [isStacking, setIsStacking] = useState(!!cue.trigger);
+
+  const reset = () => {
+    setBehavior("");
+    setTime("");
+    setLocation("");
+    setTrigger("");
+  };
 
   const handleSubmit = () => {
-    if (behavior && time && location) {
+    if (!isStacking && behavior && time && location) {
       onEdit &&
         onEdit({
           id,
           name: behavior,
-          isDesired,
-          isAchieved,
           cue: { time, location },
         });
-      setBehavior("");
-      setTime("");
-      setLocation("");
+      reset();
+    }
+    if (isStacking && behavior && trigger) {
+      onEdit &&
+        onEdit({
+          id,
+          name: behavior,
+          cue: { trigger },
+        });
+      reset();
     }
     if (!behavior && behaviorRef.current) {
       behaviorRef.current.focus();
@@ -71,25 +78,47 @@ const EditHabitIntention = ({
           value={behavior}
           onChange={(e) => setBehavior(e.target.value)}
         />
-        <Input
-          ref={timeRef}
-          placeholder="Time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-        />
-        <Input
-          ref={locationRef}
-          placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+        {isStacking ? (
+          <Input
+            ref={triggerRef}
+            placeholder="Trigger"
+            value={trigger}
+            onChange={(e) => setTrigger(e.target.value)}
+          />
+        ) : (
+          <>
+            <Input
+              ref={timeRef}
+              placeholder="Time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
+            <Input
+              ref={locationRef}
+              placeholder="Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </>
+        )}
+        <Toggle onClick={() => setIsStacking(!isStacking)}>
+          {isStacking ? "Stack" : "Intention"}
+        </Toggle>
         <Button onClick={handleSubmit}>Save</Button>
       </Flex>
       <Habit
         id="0"
-        isDesired
         name={behavior || "BEHAVIOR"}
-        cue={{ time: time || "TIME", location: location || "LOCATION" }}
+        cue={
+          isStacking
+            ? {
+                trigger: trigger || "TRIGGER",
+              }
+            : {
+                time: time || "TIME",
+                location: location || "LOCATION",
+              }
+        }
       />
     </Wrapper>
   );
@@ -125,6 +154,18 @@ const Button = styled.button`
   border-radius: 6px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   cursor: pointer;
+  :hover {
+    opacity: 0.8;
+  }
+  :active {
+    opacity: 0.5;
+  }
+`;
+const Toggle = styled(Button)`
+  background-color: ${(p) => p.theme.secondary.bgColor};
+  color: ${(p) => p.theme.secondary.color};
+  margin-left: 5px;
+  margin-right: 5px;
 `;
 
 export default EditHabitIntention;
