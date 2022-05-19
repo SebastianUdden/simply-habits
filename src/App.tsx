@@ -94,7 +94,7 @@ const App = () => {
 };
 
 const Wrapper = styled.div`
-  padding: 100px 40px 150px;
+  padding: 20x 10px 150px;
   font-size: 16px;
   padding-bottom: 150px;
   margin: 0 auto;

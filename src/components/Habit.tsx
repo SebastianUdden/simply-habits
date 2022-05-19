@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Cue, { CueProps } from "./Cue";
 import EditHabitIntention from "./EditHabitIntention";
 
-interface Completion {
-  time: Date;
+export interface Completion {
+  datetime: Date;
 }
 export interface HabitProps {
   id: string;

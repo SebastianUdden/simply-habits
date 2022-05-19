@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Habit, { HabitProps } from "../components/Habit";
+import Calendar from "../components/calendar/Calendar";
+import Habit, { Completion, HabitProps } from "../components/Habit";
 import { HabitIntentionProps } from "./HabitIntentions";
 
 interface Props {
@@ -8,6 +10,10 @@ interface Props {
 }
 
 const HabitTracker = ({ habitIntentions, onSave }: Props) => {
+  const [selectedHabit, setSelectedHabit] = useState(
+    habitIntentions.desired[0]
+  );
+
   const handleAddCompletion = (id: string) => {
     onSave({
       ...habitIntentions,
@@ -15,20 +21,34 @@ const HabitTracker = ({ habitIntentions, onSave }: Props) => {
         h.id === id
           ? {
               ...h,
-              completions: [...(h.completions || []), { time: new Date() }],
+              completions: [...(h.completions || []), { datetime: new Date() }],
             }
           : h
       ),
     });
   };
 
+  useEffect(() => {
+    setSelectedHabit(habitIntentions.desired[0]);
+  }, [habitIntentions]);
+
   return (
     <Wrapper>
       <h1>Habit Tracker</h1>
       {habitIntentions.desired.map((h: HabitProps) => (
-        <HabitWrapper>
-          <Habit {...h} onAddCompletion={handleAddCompletion} />
-        </HabitWrapper>
+        <>
+          <HabitWrapper onClick={() => setSelectedHabit(h)}>
+            <Habit {...h} onAddCompletion={handleAddCompletion} />
+          </HabitWrapper>
+          {selectedHabit === h && (
+            <Calendar
+              dates={selectedHabit?.completions?.map(
+                (c: Completion) => c.datetime
+              )}
+            />
+          )}
+          <br />
+        </>
       ))}
       <hr />
     </Wrapper>
@@ -39,5 +59,12 @@ const Wrapper = styled.div``;
 const HabitWrapper = styled.div`
   width: 100%;
   margin-bottom: 20px;
+  cursor: pointer;
+  :hover {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  }
+  :active {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  }
 `;
 export default HabitTracker;

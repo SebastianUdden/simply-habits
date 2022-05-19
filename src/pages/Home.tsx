@@ -15,7 +15,13 @@ const Home = () => {
         <li>
           <Link
             href="https://www.youtube.com/watch?v=U_nzqnXWvSo"
-            text="Atomic habits video"
+            text="Atomic habits video - short"
+          />
+        </li>
+        <li>
+          <Link
+            href="https://www.youtube.com/watch?v=g2S2mhOisso"
+            text="Atomic habits video - long"
           />
         </li>
         <li>
