@@ -19,7 +19,7 @@ const Name = styled.td`
   text-align: center;
 `;
 const Description = styled.td`
-  padding: 15px 20px;
+  padding: 10px;
 `;
 
 export default Tip;

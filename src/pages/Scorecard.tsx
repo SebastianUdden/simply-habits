@@ -136,7 +136,6 @@ const THead = styled.thead`
   color: ${(p) => p.theme.secondary.color};
   cursor: pointer;
   th {
-    font-size: 18px;
     padding: 20px;
   }
   :hover {
@@ -168,6 +167,7 @@ const Tooltip = styled.p`
 
 export const Input = styled.input`
   box-sizing: border-box;
+  border: none;
   margin: 0;
   width: 100%;
   min-width: 40vw;

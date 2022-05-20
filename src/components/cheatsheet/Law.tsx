@@ -35,15 +35,17 @@ export const THead = styled.thead`
   background-color: ${(p) => p.theme.secondary.bgColor};
   color: ${(p) => p.theme.secondary.color};
   th {
-    padding: 20px;
+    padding: 20px 10px;
     text-align: center;
     white-space: nowrap;
+    @media (min-width: 600px) {
+      padding: 20px;
+    }
   }
 `;
 export const TBody = styled.tbody`
   background-color: ${(p) => p.theme.background.bgColor};
   color: ${(p) => p.theme.background.color};
-  padding: 20px;
 `;
 
 export default Law;

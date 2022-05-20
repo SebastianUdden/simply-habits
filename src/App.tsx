@@ -60,41 +60,60 @@ const App = () => {
 
   return (
     <Theme theme={theme}>
-      <Wrapper>
-        {tab === HOME && <Home />}
-        {tab === CHEAT_SHEET && <CheatSheet />}
-        {tab === SCORECARD && (
-          <Scorecard
-            scoreHabits={habits?.scoreHabits || []}
-            onSave={(scoreHabits: ScoreHabitProps[]) =>
-              setHabits({ ...habits, scoreHabits })
+      <Container>
+        <Wrapper>
+          {tab === HOME && <Home />}
+          {tab === CHEAT_SHEET && <CheatSheet />}
+          {tab === SCORECARD && (
+            <Scorecard
+              scoreHabits={habits?.scoreHabits || []}
+              onSave={(scoreHabits: ScoreHabitProps[]) =>
+                setHabits({ ...habits, scoreHabits })
+              }
+            />
+          )}
+          {tab === HABIT_INTENTIONS && (
+            <HabitIntentions
+              habitIntentions={
+                habits?.habitIntentions || defaultHabitIntentions
+              }
+              onSave={(habitIntentions: HabitProps[]) =>
+                setHabits({ ...habits, habitIntentions })
+              }
+            />
+          )}
+          {tab === HABIT_TRACKER && (
+            <HabitTracker
+              habitIntentions={
+                habits?.habitIntentions || defaultHabitIntentions
+              }
+              onSave={(habitIntentions: HabitProps[]) =>
+                setHabits({ ...habits, habitIntentions })
+              }
+            />
+          )}
+          <Navigation
+            tab={tab}
+            tabs={
+              habits?.habitIntentions
+                ? tabs
+                : tabs.filter((t: any) => t.text.desktop !== HABIT_TRACKER)
             }
+            onTabChange={(t: any) => setTab(t)}
           />
-        )}
-        {tab === HABIT_INTENTIONS && (
-          <HabitIntentions
-            habitIntentions={habits?.habitIntentions || defaultHabitIntentions}
-            onSave={(habitIntentions: HabitProps[]) =>
-              setHabits({ ...habits, habitIntentions })
-            }
-          />
-        )}
-        {tab === HABIT_TRACKER && (
-          <HabitTracker
-            habitIntentions={habits?.habitIntentions || defaultHabitIntentions}
-            onSave={(habitIntentions: HabitProps[]) =>
-              setHabits({ ...habits, habitIntentions })
-            }
-          />
-        )}
-        <Navigation tab={tab} tabs={tabs} onTabChange={(t: any) => setTab(t)} />
-      </Wrapper>
+        </Wrapper>
+      </Container>
     </Theme>
   );
 };
 
+const Container = styled.div`
+  padding: 10px;
+  @media (min-width: 600px) {
+    padding: 20px;
+  } ;
+`;
 const Wrapper = styled.div`
-  padding: 20x 10px 150px;
   font-size: 16px;
   padding-bottom: 150px;
   margin: 0 auto;

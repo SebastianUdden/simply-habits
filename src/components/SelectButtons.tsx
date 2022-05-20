@@ -32,6 +32,9 @@ export const SelectButton = styled.button<{ bType?: string }>`
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   cursor: pointer;
   transition: all 200ms ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   :hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   }

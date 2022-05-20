@@ -259,9 +259,9 @@ const Day = styled.div<{ isSelected: boolean; isMatch: boolean }>`
   flex: 1;
   cursor: pointer;
   user-select: none;
-  :hover {
+  /* :hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  }
+  } */
   ${(p) =>
     p.isMatch &&
     `
@@ -272,18 +272,17 @@ const Day = styled.div<{ isSelected: boolean; isMatch: boolean }>`
     p.isSelected &&
     `
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-    :hover {
+    `} /* :hover {
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    }
-  `}
+    } */
 `;
 const Today = styled(Day)`
   background-color: ${(p) => p.theme.primary.bgColor};
   color: ${(p) => p.theme.primary.color};
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  :hover {
+  /* :hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  }
+  } */
   ${(p) =>
     p.isMatch &&
     `

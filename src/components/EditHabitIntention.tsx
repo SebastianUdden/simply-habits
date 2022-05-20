@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { CueProps } from "./Cue";
 import Habit from "./Habit";
+import { Input } from "./NewHabitIntention";
 
 interface Props {
   id: string;
@@ -133,18 +134,18 @@ const Flex = styled.div`
     flex-direction: row;
   }
 `;
-const Input = styled.input`
-  padding: 20px;
-  font-size: 16px;
-  margin-bottom: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  border: none;
-  @media (min-width: 600px) {
-    width: 100%;
-    margin-right: 5px;
-    margin-bottom: 0;
-  }
-`;
+// const Input = styled.input`
+//   padding: 20px;
+//   font-size: 16px;
+//   margin-bottom: 10px;
+//   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+//   border: none;
+//   @media (min-width: 600px) {
+//     width: 100%;
+//     margin-right: 5px;
+//     margin-bottom: 0;
+//   }
+// `;
 const Button = styled.button`
   border: none;
   padding: 20px;

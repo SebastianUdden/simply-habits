@@ -10,9 +10,7 @@ interface Props {
 }
 
 const HabitTracker = ({ habitIntentions, onSave }: Props) => {
-  const [selectedHabit, setSelectedHabit] = useState(
-    habitIntentions.desired[0]
-  );
+  const [selectedHabit, setSelectedHabit] = useState<any>();
 
   const handleAddCompletion = (id: string) => {
     onSave({
@@ -29,7 +27,7 @@ const HabitTracker = ({ habitIntentions, onSave }: Props) => {
   };
 
   useEffect(() => {
-    setSelectedHabit(habitIntentions.desired[0]);
+    setSelectedHabit(undefined);
   }, [habitIntentions]);
 
   return (
@@ -37,7 +35,11 @@ const HabitTracker = ({ habitIntentions, onSave }: Props) => {
       <h1>Habit Tracker</h1>
       {habitIntentions.desired.map((h: HabitProps) => (
         <>
-          <HabitWrapper onClick={() => setSelectedHabit(h)}>
+          <HabitWrapper
+            onClick={() =>
+              setSelectedHabit(selectedHabit === h ? undefined : h)
+            }
+          >
             <Habit {...h} onAddCompletion={handleAddCompletion} />
           </HabitWrapper>
           {selectedHabit === h && (
@@ -58,7 +60,7 @@ const HabitTracker = ({ habitIntentions, onSave }: Props) => {
 const Wrapper = styled.div``;
 const HabitWrapper = styled.div`
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   cursor: pointer;
   :hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);

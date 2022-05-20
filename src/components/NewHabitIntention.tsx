@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { uuidv4 } from "../utils";
 import Habit from "./Habit";
@@ -13,6 +13,7 @@ const NewHabitIntention = ({ onAddHabitIntention }: Props) => {
   const locationRef = useRef<any>(null);
   const triggerRef = useRef<any>(null);
   const temptationRef = useRef<any>(null);
+  const questionRef = useRef<any>(null);
 
   const [behavior, setBehavior] = useState("");
   const [time, setTime] = useState("");
@@ -95,77 +96,95 @@ const NewHabitIntention = ({ onAddHabitIntention }: Props) => {
     isStacking ? stackSubmit() : regularSubmit();
   };
 
+  useEffect(() => {
+    if (showSave) {
+      questionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    } else {
+      behaviorRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }
+  }, [showSave]);
+
   return (
     <Wrapper>
       <h1>
         Habit {isStacking ? "stack" : "intention"}{" "}
         {isTemptation && "with temptation"}
       </h1>
-      <Flex>
-        <Input
-          ref={behaviorRef}
-          placeholder="Behavior"
-          value={behavior}
-          onChange={(e) => setBehavior(e.target.value)}
+      <Column showSave={showSave}>
+        <Flex>
+          <Input
+            ref={behaviorRef}
+            placeholder="Behavior"
+            value={behavior}
+            onChange={(e) => setBehavior(e.target.value)}
+          />
+          {isStacking ? (
+            <Input
+              ref={triggerRef}
+              placeholder="Trigger"
+              value={trigger}
+              onChange={(e) => setTrigger(e.target.value)}
+            />
+          ) : (
+            <>
+              <Input
+                ref={timeRef}
+                placeholder="Time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+              <Input
+                ref={locationRef}
+                placeholder="Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </>
+          )}
+          {isTemptation && (
+            <Input
+              ref={temptationRef}
+              placeholder="Temptation"
+              value={temptation}
+              onChange={(e) => setTemptation(e.target.value)}
+            />
+          )}
+          <Toggle onClick={() => setIsStacking(!isStacking)}>
+            {isStacking ? "Intention" : "Stack"}
+          </Toggle>
+          <Toggle onClick={() => setIsTemptation(!isTemptation)}>
+            {isTemptation ? "Willpower" : "Temptation"}
+          </Toggle>
+          <Button onClick={() => setShowSave(true)}>Create</Button>
+        </Flex>
+        <Habit
+          id="0"
+          name={behavior || "BEHAVIOR"}
+          cue={{
+            ...(isStacking && {
+              trigger: trigger || "TRIGGER",
+            }),
+            ...(isTemptation && {
+              temptation: temptation || "TEMPTATION",
+            }),
+            ...(!isStacking && {
+              time: time || "TIME",
+              location: location || "LOCATION",
+            }),
+          }}
         />
-        {isStacking ? (
-          <Input
-            ref={triggerRef}
-            placeholder="Trigger"
-            value={trigger}
-            onChange={(e) => setTrigger(e.target.value)}
-          />
-        ) : (
-          <>
-            <Input
-              ref={timeRef}
-              placeholder="Time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
-            <Input
-              ref={locationRef}
-              placeholder="Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </>
-        )}
-        {isTemptation && (
-          <Input
-            ref={temptationRef}
-            placeholder="Temptation"
-            value={temptation}
-            onChange={(e) => setTemptation(e.target.value)}
-          />
-        )}
-        <Toggle onClick={() => setIsStacking(!isStacking)}>
-          {isStacking ? "Intention" : "Stack"}
-        </Toggle>
-        <Toggle onClick={() => setIsTemptation(!isTemptation)}>
-          {isTemptation ? "Willpower" : "Temptation"}
-        </Toggle>
-        <Button onClick={() => setShowSave(true)}>Create</Button>
-      </Flex>
-      <Habit
-        id="0"
-        name={behavior || "BEHAVIOR"}
-        cue={{
-          ...(isStacking && {
-            trigger: trigger || "TRIGGER",
-          }),
-          ...(isTemptation && {
-            temptation: temptation || "TEMPTATION",
-          }),
-          ...(!isStacking && {
-            time: time || "TIME",
-            location: location || "LOCATION",
-          }),
-        }}
-      />
+      </Column>
       {showSave && (
         <Flex>
-          <Ingress>
+          <Ingress ref={questionRef}>
             Can the habit/behavior be done in <strong>2 minutes or less</strong>
             ?
           </Ingress>
@@ -180,8 +199,16 @@ const NewHabitIntention = ({ onAddHabitIntention }: Props) => {
 const RESPONSIVE_WIDTH = "900px";
 
 const Wrapper = styled.div``;
+const Column = styled.div<{ showSave?: boolean }>`
+  display: flex;
+  flex-direction: ${(p) => (p.showSave ? "column" : "column-reverse")};
+  @media (min-width: 600px) {
+    flex-direction: column;
+  }
+`;
 const Flex = styled.div`
   display: flex;
+  margin-top: 10px;
   margin-bottom: 10px;
   flex-direction: column;
   max-width: 100%;
@@ -189,7 +216,8 @@ const Flex = styled.div`
     flex-direction: row;
   }
 `;
-const Input = styled.input`
+export const Input = styled.input`
+  -webkit-appearance: none;
   padding: 20px;
   font-size: 16px;
   margin-bottom: 12px;

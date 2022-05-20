@@ -1,7 +1,7 @@
 export const CHEAT_SHEET = {
   laws: [
     {
-      name: "The 1st Law",
+      name: "Law 1",
       description: "Make It Obvious",
       tips: [
         {
@@ -27,7 +27,7 @@ export const CHEAT_SHEET = {
       ],
     },
     {
-      name: "The 2nd Law",
+      name: "Law 2",
       description: "Make It Attractive",
       tips: [
         {
@@ -48,7 +48,7 @@ export const CHEAT_SHEET = {
       ],
     },
     {
-      name: "The 3rd Law",
+      name: "Law 3",
       description: "Make It Easy",
       tips: [
         {
@@ -79,7 +79,7 @@ export const CHEAT_SHEET = {
       ],
     },
     {
-      name: "The 4th Law",
+      name: "Law 4",
       description: "Make It Satisfying",
       tips: [
         {
@@ -107,7 +107,7 @@ export const CHEAT_SHEET = {
   ],
   inversions: [
     {
-      name: "Inversion of the 1st Law",
+      name: "Law 1",
       description: "Make It Invisbile",
       tips: [
         {
@@ -118,7 +118,7 @@ export const CHEAT_SHEET = {
       ],
     },
     {
-      name: "Inversion of the 2nd Law",
+      name: "Law 2",
       description: "Make It Unattractive",
       tips: [
         {
@@ -129,7 +129,7 @@ export const CHEAT_SHEET = {
       ],
     },
     {
-      name: "Inversion of the 3rd Law",
+      name: "Law 3",
       description: "Make It Difficult",
       tips: [
         {
@@ -145,7 +145,7 @@ export const CHEAT_SHEET = {
       ],
     },
     {
-      name: "Inversion of the 4th Law",
+      name: "Law 4",
       description: "Make It Unsatisfying",
       tips: [
         {
