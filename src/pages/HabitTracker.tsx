@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Calendar from "../components/calendar/Calendar";
+import Arrows from "../components/draggable/Arrows";
 import Habit, { Completion, HabitProps } from "../components/Habit";
+import Heading from "../components/Heading";
 import { HabitIntentionProps } from "./HabitIntentions";
 
 interface Props {
@@ -32,15 +34,26 @@ const HabitTracker = ({ habitIntentions, onSave }: Props) => {
 
   return (
     <Wrapper>
-      <h1>Habit Tracker</h1>
-      {habitIntentions.desired.map((h: HabitProps) => (
+      <Heading>Habit Tracker</Heading>
+      {habitIntentions.desired.map((h: HabitProps, i: number) => (
         <>
           <HabitWrapper
             onClick={() =>
               setSelectedHabit(selectedHabit === h ? undefined : h)
             }
           >
-            <Habit {...h} onAddCompletion={handleAddCompletion} />
+            <Habit
+              {...h}
+              onAddCompletion={handleAddCompletion}
+              isSelected={selectedHabit === h}
+            />
+            <Arrows
+              index={i}
+              list={habitIntentions.desired}
+              onListUpdate={(list: any) =>
+                onSave({ ...habitIntentions, desired: list })
+              }
+            />
           </HabitWrapper>
           {selectedHabit === h && (
             <Calendar
@@ -61,6 +74,7 @@ const Wrapper = styled.div``;
 const HabitWrapper = styled.div`
   width: 100%;
   margin-bottom: 5px;
+  display: flex;
   cursor: pointer;
   :hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);

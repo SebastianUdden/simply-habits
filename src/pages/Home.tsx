@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Heading from "../components/Heading";
 import ImportExport from "../components/ImportExport";
 
 const Link = ({ href, text }: { href: string; text: string }) => (
@@ -10,7 +11,7 @@ const Link = ({ href, text }: { href: string; text: string }) => (
 const Home = () => {
   return (
     <Wrapper>
-      <h1>SimplyHabits</h1>
+      <Heading>Simply Habits</Heading>
       <ul>
         <li>
           <Link
@@ -174,6 +175,12 @@ const Home = () => {
 };
 
 const Wrapper = styled.div`
+  h1 {
+    display: flex;
+    align-items: center;
+  }
+  img {
+  }
   ul {
     padding: 2px 20px;
     li {

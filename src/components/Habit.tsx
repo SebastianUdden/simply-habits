@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Cue, { CueProps } from "./Cue";
 import EditHabitIntention from "./EditHabitIntention";
@@ -10,6 +10,7 @@ export interface HabitProps {
   id: string;
   name: string;
   cue: CueProps;
+  isSelected?: boolean;
   completions?: Completion[];
   onAddCompletion?: Function;
   onEdit?: Function;
@@ -21,18 +22,31 @@ const Habit = ({
   id,
   name,
   cue,
+  isSelected,
   completions,
   onAddCompletion,
   onEdit,
   onAchieved,
   onDelete,
 }: HabitProps) => {
+  const ref = useRef<any>(null);
   const [showEdit, setShowEdit] = useState(false);
+  const [showButtons, setShowButtons] = useState(false);
 
   const handleEditHabitIntention = (h: HabitProps) => {
     setShowEdit(false);
     onEdit && onEdit(h);
   };
+
+  useEffect(() => {
+    if (isSelected) {
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "start",
+      });
+    }
+  }, [isSelected, ref]);
 
   return (
     <>
@@ -44,44 +58,50 @@ const Habit = ({
           onEdit={handleEditHabitIntention}
         />
       ) : (
-        <Wrapper>
-          <Row>
+        <Wrapper ref={ref}>
+          <WrappingRow>
             <Column>
               <Row>
-                <P>
+                <P onClick={() => setShowButtons(!showButtons)}>
                   I will <Name>{name}</Name> {cue && <Cue {...cue} />}
                 </P>
-                <Buttons>
-                  {onAchieved && (
-                    <Button onClick={() => onAchieved(id)}>Achieved</Button>
-                  )}
-                  {onEdit && (
-                    <Button onClick={() => setShowEdit(true)} isEdit>
-                      Edit
-                    </Button>
-                  )}
-                  {onDelete && (
-                    <Button onClick={() => onDelete(id)} isDelete>
-                      Delete
-                    </Button>
-                  )}
-                </Buttons>
+                {showButtons && (
+                  <Buttons>
+                    {onAchieved && (
+                      <Button onClick={() => onAchieved(id)}>Achieved</Button>
+                    )}
+                    {onEdit && (
+                      <Button onClick={() => setShowEdit(true)} isEdit>
+                        Edit
+                      </Button>
+                    )}
+                    {onDelete && (
+                      <Button onClick={() => onDelete(id)} isDelete>
+                        Delete
+                      </Button>
+                    )}
+                  </Buttons>
+                )}
               </Row>
-              {onAddCompletion && completions && (
-                <Row>
-                  <Count pass50={completions?.length > 49}>
-                    <span>{completions.length}</span>
-                    {completions.map((c) => (
-                      <Dot />
-                    ))}
-                  </Count>
-                </Row>
+              {onAddCompletion && (
+                <WrappingRow>
+                  {completions ? (
+                    <Count pass50={completions?.length > 49}>
+                      <span>{completions.length}</span>
+                      {completions.map((c) => (
+                        <Dot />
+                      ))}
+                    </Count>
+                  ) : (
+                    <span />
+                  )}
+                  {onAddCompletion && (
+                    <Button onClick={() => onAddCompletion(id)}>+</Button>
+                  )}
+                </WrappingRow>
               )}
             </Column>
-            {onAddCompletion && (
-              <Button onClick={() => onAddCompletion(id)}>+</Button>
-            )}
-          </Row>
+          </WrappingRow>
         </Wrapper>
       )}
     </>
@@ -97,10 +117,15 @@ const Wrapper = styled.div`
 `;
 const Row = styled.div`
   display: flex;
+  flex-direction: column;
   @media (min-width: 600px) {
     flex-direction: row;
     justify-content: space-between;
   }
+`;
+const WrappingRow = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 const Column = styled.div`
   display: flex;
@@ -108,13 +133,23 @@ const Column = styled.div`
   width: 100%;
 `;
 const P = styled.p`
+  box-sizing: border-box;
+  width: 100%;
   margin: 0;
   padding: 25px 30px;
   user-select: none;
+  cursor: pointer;
+  :hover {
+    opacity: 0.8;
+  }
+  :active {
+    opacity: 0.5;
+  }
 `;
 const Name = styled.label`
   color: ${(p) => p.theme.secondary.bgColor};
   font-weight: 700;
+  cursor: pointer;
 `;
 const Buttons = styled.div`
   display: flex;

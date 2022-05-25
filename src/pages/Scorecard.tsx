@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import Heading from "../components/Heading";
 import ScoreHabit, { ScoreHabitProps } from "../components/ScoreHabit";
 import SelectButtons from "../components/SelectButtons";
 import { uuidv4 } from "../utils";
@@ -49,7 +50,7 @@ const Scorecard = ({ scoreHabits, onSave }: Props) => {
 
   return (
     <Wrapper>
-      <h1>Habits Scorecard</h1>
+      <Heading>Habits Scorecard</Heading>
       <Table>
         <THead>
           <tr onClick={() => setShowDescription(!showDescription)}>

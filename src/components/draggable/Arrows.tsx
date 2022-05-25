@@ -40,9 +40,9 @@ const Arrows = ({ index, list, onListUpdate, rounded = false }: Props) => {
 };
 
 const Wrapper = styled.div<{ rounded?: boolean }>`
-  display: none;
+  display: flex;
   @media (min-width: 400px) {
-    display: flex;
+    display: none;
   }
   flex-direction: column;
   justify-content: center;

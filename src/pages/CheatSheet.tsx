@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import Law from "../components/cheatsheet/Law";
+import Heading from "../components/Heading";
 import { CHEAT_SHEET } from "../constants/cheat-sheet";
 
 const CheatSheet = () => {
   return (
     <Wrapper>
-      <h1>Habits Cheat Sheet</h1>
+      <Heading>Habits Cheat Sheet</Heading>
       <h2>The 4 laws</h2>
       {CHEAT_SHEET.laws.map((law) => (
         <Law {...law} />

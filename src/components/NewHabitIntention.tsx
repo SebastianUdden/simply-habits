@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { uuidv4 } from "../utils";
 import Habit from "./Habit";
+import Heading from "./Heading";
 
 interface Props {
   onAddHabitIntention: Function;
@@ -114,10 +115,10 @@ const NewHabitIntention = ({ onAddHabitIntention }: Props) => {
 
   return (
     <Wrapper>
-      <h1>
+      <Heading>
         Habit {isStacking ? "stack" : "intention"}{" "}
         {isTemptation && "with temptation"}
-      </h1>
+      </Heading>
       <Column showSave={showSave}>
         <Flex>
           <Input
