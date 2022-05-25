@@ -23,12 +23,12 @@ const Buttons = styled.div`
   justify-content: center;
 `;
 export const SelectButton = styled.button<{ bType?: string }>`
-  width: 40px;
-  height: 50px;
+  width: 30px;
+  height: 40px;
   margin: 5px;
   border-radius: 6px;
   border: none;
-  font-size: 25px;
+  font-size: 22px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   cursor: pointer;
   transition: all 200ms ease;

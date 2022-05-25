@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Input } from "../pages/Scorecard";
+import Arrows from "./draggable/Arrows";
 import SelectButtons, { SelectButton } from "./SelectButtons";
 
 export interface ScoreHabitProps {
@@ -94,6 +95,12 @@ const ScoreHabit = ({
             >
               &times;
             </SelectButton>
+            <Arrows
+              index={index}
+              list={habits}
+              onListUpdate={onChangeHabits}
+              rounded
+            />
           </Flex>
         ) : (
           <Flex>

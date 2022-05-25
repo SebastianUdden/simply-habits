@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Arrows from "../components/draggable/Arrows";
 import DraggableList from "../components/draggable/DraggableList";
 import Habit, { HabitProps } from "../components/Habit";
 import NewHabitIntention from "../components/NewHabitIntention";
@@ -89,6 +90,13 @@ const HabitIntentions = ({ habitIntentions, onSave }: Props) => {
                       onDelete={(id: string) => handleDelete(DESIRED, id)}
                     />
                   )}
+                  <Arrows
+                    index={i}
+                    list={desired}
+                    onListUpdate={(list: any) =>
+                      onSave({ ...habitIntentions, desired: list })
+                    }
+                  />
                 </HabitWrapper>
               ))}
             />
@@ -105,12 +113,19 @@ const HabitIntentions = ({ habitIntentions, onSave }: Props) => {
                 onSave({ ...habitIntentions, undesired: list })
               }
               list={undesired}
-              listView={undesired.map((habit: HabitProps) => (
+              listView={undesired.map((habit: HabitProps, i: number) => (
                 <HabitWrapper>
                   <Habit
                     {...habit}
                     onEdit={(h: HabitProps) => handleEdit(UNDESIRED, h)}
                     onDelete={(id: string) => handleDelete(UNDESIRED, id)}
+                  />
+                  <Arrows
+                    index={i}
+                    list={undesired}
+                    onListUpdate={(list: any) =>
+                      onSave({ ...habitIntentions, undesired: list })
+                    }
                   />
                 </HabitWrapper>
               ))}
@@ -127,12 +142,19 @@ const HabitIntentions = ({ habitIntentions, onSave }: Props) => {
                 onSave({ ...habitIntentions, achieved: list })
               }
               list={achieved}
-              listView={achieved.map((habit: HabitProps) => (
+              listView={achieved.map((habit: HabitProps, i: number) => (
                 <HabitWrapper>
                   <Habit
                     {...habit}
                     onEdit={(h: HabitProps) => handleEdit(ACHIEVED, h)}
                     onDelete={(id: string) => handleDelete(ACHIEVED, id)}
+                  />
+                  <Arrows
+                    index={i}
+                    list={achieved}
+                    onListUpdate={(list: any) =>
+                      onSave({ ...habitIntentions, achieved: list })
+                    }
                   />
                 </HabitWrapper>
               ))}
@@ -153,6 +175,7 @@ const Wrapper = styled.div`
   }
 `;
 const HabitWrapper = styled.div`
+  display: flex;
   width: 100%;
   margin-bottom: 20px;
 `;

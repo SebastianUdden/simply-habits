@@ -111,7 +111,7 @@ const Container = styled.div`
   padding: 10px;
   @media (min-width: 600px) {
     padding: 20px;
-  } ;
+  }
 `;
 const Wrapper = styled.div`
   font-size: 16px;

@@ -46,38 +46,42 @@ const Habit = ({
       ) : (
         <Wrapper>
           <Row>
-            <P>
-              I will <Name>{name}</Name> {cue && <Cue {...cue} />}
-            </P>
-            <Buttons>
-              {onAchieved && (
-                <Button onClick={() => onAchieved(id)}>Achieved</Button>
+            <Column>
+              <Row>
+                <P>
+                  I will <Name>{name}</Name> {cue && <Cue {...cue} />}
+                </P>
+                <Buttons>
+                  {onAchieved && (
+                    <Button onClick={() => onAchieved(id)}>Achieved</Button>
+                  )}
+                  {onEdit && (
+                    <Button onClick={() => setShowEdit(true)} isEdit>
+                      Edit
+                    </Button>
+                  )}
+                  {onDelete && (
+                    <Button onClick={() => onDelete(id)} isDelete>
+                      Delete
+                    </Button>
+                  )}
+                </Buttons>
+              </Row>
+              {onAddCompletion && completions && (
+                <Row>
+                  <Count pass50={completions?.length > 49}>
+                    <span>{completions.length}</span>
+                    {completions.map((c) => (
+                      <Dot />
+                    ))}
+                  </Count>
+                </Row>
               )}
-              {onEdit && (
-                <Button onClick={() => setShowEdit(true)} isEdit>
-                  Edit
-                </Button>
-              )}
-              {onAddCompletion && (
-                <Button onClick={() => onAddCompletion(id)}>+</Button>
-              )}
-              {onDelete && (
-                <Button onClick={() => onDelete(id)} isDelete>
-                  Delete
-                </Button>
-              )}
-            </Buttons>
+            </Column>
+            {onAddCompletion && (
+              <Button onClick={() => onAddCompletion(id)}>+</Button>
+            )}
           </Row>
-          {onAddCompletion && completions && (
-            <Row>
-              <Count pass50={completions?.length > 49}>
-                <span>{completions.length}</span>
-                {completions.map((c) => (
-                  <Dot />
-                ))}
-              </Count>
-            </Row>
-          )}
         </Wrapper>
       )}
     </>
@@ -93,15 +97,20 @@ const Wrapper = styled.div`
 `;
 const Row = styled.div`
   display: flex;
-  flex-direction: column;
   @media (min-width: 600px) {
     flex-direction: row;
     justify-content: space-between;
   }
 `;
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
 const P = styled.p`
   margin: 0;
   padding: 25px 30px;
+  user-select: none;
 `;
 const Name = styled.label`
   color: ${(p) => p.theme.secondary.bgColor};
